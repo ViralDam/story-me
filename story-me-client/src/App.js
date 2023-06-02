@@ -26,11 +26,16 @@ function App() {
 
 
   const changeHandler = (event) => {
-    setSelectedFile(event.target.files);
+    const filesList = event.target.files;
+    let filesArray = Array.from(filesList);
+    filesArray.sort(function (a, b) {
+      return ('' + a.name.toLowerCase()).localeCompare(b.name.toLowerCase());
+    });
+    setSelectedFile(filesArray);
   };
 
   const handleMood = (newMood) => {
-    if(newMood === mood) {
+    if (newMood === mood) {
       setMood('');
     }
     else {
@@ -62,7 +67,7 @@ function App() {
     images.forEach(element => {
       imageText += `"${element}", `
     });
-    const moodText = mood !== '' ? `Do note that the author of the story is ${mood}.` :'';
+    const moodText = mood !== '' ? `Do note that the author of the story is ${mood}.` : '';
     const response = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: `If we want images to say a story how can we do that? Write an interesting and engaging story from the given image descriptions. Story should also be meaningful. ${moodText}\nScenarios: ${imageText}\nStory:`,
@@ -161,7 +166,7 @@ function App() {
                     </Col>
                   </Row>
                   <Form.Group controlId="formFileMultiple">
-                        <Form.Label>Select author's mood (optional):</Form.Label>
+                    <Form.Label>Select author's mood (optional):</Form.Label>
                   </Form.Group>
                   <Stack direction='horizontal' gap={3}>
                     <div className={mood === 'happy' ? 'emoji-div emoji-active' : 'emoji-div'} onClick={() => handleMood('happy')}><p className='emoji'>😁</p><p className='emoji-text'>Happy</p></div>
