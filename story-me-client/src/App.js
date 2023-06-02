@@ -70,7 +70,20 @@ function App() {
     const moodText = mood !== '' ? `Do note that the author of the story is ${mood}.` : '';
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `If we want images to say a story how can we do that? Write an interesting and engaging story from the given image descriptions. Story should also be meaningful. ${moodText}\nScenarios: ${imageText}\nStory:`,
+      prompt: `If we want images to say a story how can we do that? Write an interesting and engaging story from the given image descriptions. Story should be long. Consider following poins when making a story:\n
+Give your story strong dramatic content\n
+Vary rhythm and structure in your prose\n
+Create believable, memorable characters\n
+Make the important story sections effective\n
+Deepen your plot with subplots\n
+Make every line of dialogue count\n
+Add what makes a good story (immersive setting)\n
+Create conflict and tension\n
+Craft beguiling beginnings\n
+Deliver knockout endings\n
+You can merge the descriptions if meaningful. Story should also be meaningful. ${moodText}\n
+Scenarios: ${imageText}\n
+Story:`,
       temperature: 0,
       max_tokens: 3500,
     });
