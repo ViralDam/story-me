@@ -27,8 +27,9 @@ def upload_file():
     for file in files:
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename.lower()))
     filenames = next(walk(UPLOAD_FOLDER), (None, None, []))[2]
+    filenames.sort()
     text1 = image2text(filenames)
     for file in filenames:
         os.remove('uploads/'+file)

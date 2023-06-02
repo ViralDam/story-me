@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+.emoji-div {
+  text-align: center;
+  border: 0.5px solid #519af3;
+  padding: 4px;
+  min-width: 50px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.emoji-div:hover {
+  border: 1px solid #519af3;
+}
+
+.emoji-active {
+  border: 1px solid #519af3;
+  background-color: #519af380;
+}
+
+.emoji-text {
+  margin-bottom: 0;
+  font-size: 0.5rem;
+}
+
+.emoji {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}

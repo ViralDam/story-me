@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from './logo.png';
 import storyImage from './story-writer.png';
-import { Button, Col, Container, Form, Row, Navbar, Stack, Spinner, Placeholder } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row, Navbar, Stack, Spinner } from 'react-bootstrap';
 import ImageCarousel from './ImageCarousel';
 
 const { Configuration, OpenAIApi } = require("openai");
@@ -22,11 +22,21 @@ function App() {
   const [story, setStory] = useState('');
   const [title, setTitle] = useState('');
   const [isFetchingTitle, setIsFetchingTitle] = useState(false);
+  const [mood, setMood] = useState('');
 
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files);
   };
+
+  const handleMood = (newMood) => {
+    if(newMood === mood) {
+      setMood('');
+    }
+    else {
+      setMood(newMood)
+    }
+  }
 
   const handleReset = () => {
     window.location.reload();
@@ -52,11 +62,10 @@ function App() {
     images.forEach(element => {
       imageText += `"${element}", `
     });
+    const moodText = mood !== '' ? `Do note that the author of the story is ${mood}.` :'';
     const response = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `Given image descriptions, generate a suspenseful story.\n
-                  Image Descriptions: ${imageText}\n
-                  Story:`,
+      prompt: `If we want images to say a story how can we do that? Write an interesting and engaging story from the given image descriptions. Story should also be meaningful. ${moodText}\nScenarios: ${imageText}\nStory:`,
       temperature: 0,
       max_tokens: 3500,
     });
@@ -134,14 +143,14 @@ function App() {
         <Row>
           <Col>
             {
-              selectedFile && (
+              (selectedFile && selectedFile.length > 0) && (
                 <ImageCarousel files={selectedFile} desc={imageDescriptions} />
               )
             }
             {
               !isImageSubmitted ? (
                 <>
-                  <Row style={!selectedFile ? { marginTop: '25%' } : { marginTop: '10px' }}>
+                  <Row style={!(selectedFile && selectedFile.length > 0) ? { marginTop: '25%' } : { marginTop: '20px' }}>
                     <Col>
                       <Form.Group controlId="formFileMultiple" className="mb-3">
                         <Form.Label>Select Images to get started</Form.Label>
@@ -151,7 +160,18 @@ function App() {
                     <Col>
                     </Col>
                   </Row>
-                  <Button onClick={handleSubmission} disabled={!selectedFile} style={{ maxWidth: '100px' }}>Submit</Button>
+                  <Form.Group controlId="formFileMultiple">
+                        <Form.Label>Select author's mood (optional):</Form.Label>
+                  </Form.Group>
+                  <Stack direction='horizontal' gap={3}>
+                    <div className={mood === 'happy' ? 'emoji-div emoji-active' : 'emoji-div'} onClick={() => handleMood('happy')}><p className='emoji'>😁</p><p className='emoji-text'>Happy</p></div>
+                    <div className={mood === 'sad' ? 'emoji-div emoji-active' : 'emoji-div'} onClick={() => handleMood('sad')}><p className='emoji'>😟</p><p className='emoji-text'>Sad</p></div>
+                    <div className={mood === 'angry' ? 'emoji-div emoji-active' : 'emoji-div'} onClick={() => handleMood('angry')}><p className='emoji'>😡</p><p className='emoji-text'>Angry</p></div>
+                    <div className={mood === 'disgusted' ? 'emoji-div emoji-active' : 'emoji-div'} onClick={() => handleMood('disgusted')}><p className='emoji'>🤢</p><p className='emoji-text'>Disgusted</p></div>
+                    <div className={mood === 'shocked' ? 'emoji-div emoji-active' : 'emoji-div'} onClick={() => handleMood('shocked')}><p className='emoji'>😱</p><p className='emoji-text'>Shocked</p></div>
+                    <div className={mood === 'scared' ? 'emoji-div emoji-active' : 'emoji-div'} onClick={() => handleMood('scared')}><p className='emoji'>🫣</p><p className='emoji-text'>Scared</p></div>
+                  </Stack>
+                  <Button onClick={handleSubmission} disabled={!selectedFile} className='mt-3' style={{ maxWidth: '100px', marginBottom: '100px', }}>Submit</Button>
                 </>
               ) : null
             }
@@ -190,23 +210,19 @@ function App() {
                   {
                     title ? (
                       <h3 style={{
-                        marginTop: '10px',
+                        marginTop: '20px',
                         fontFamily: "'Robato', sans-serif",
                       }}>
                         {title}
                       </h3>
-                    ) : (
-                      <Placeholder style={{ marginTop: '10px' }} animation="glow">
-                        <Placeholder size='lg' className="w-75" as='h3' />
-                      </Placeholder>
-                    )
+                    ) : null
                   }
                   <p id="story" style={{
                     border: '0.5px solid',
                     borderRadius: '10px',
                     background: '#f8f8f8',
                     color: '#343a40',
-                    marginTop: '10px',
+                    marginTop: '20px',
                     marginBottom: '50px',
                     padding: '12px',
                     whiteSpace: 'pre-line',
@@ -226,7 +242,7 @@ function App() {
         <Container>
           <Navbar.Brand>
             <Row>
-              <p className="d-inline-block">Created by: Viral Damaniya & Shreyash Joshi</p>
+              <p className="d-inline-block">Created by: Viral Damaniya & Shreyas Joshi</p>
             </Row>
           </Navbar.Brand>
         </Container>

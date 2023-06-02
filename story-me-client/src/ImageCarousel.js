@@ -9,7 +9,7 @@ function ImageCarousel({ files, desc }) {
                     src={URL.createObjectURL(file)}
                     height="400"
                 />
-                {desc.length !== 0 ? (
+                {desc.length !== 0 && index < desc.length ? (
                     <Carousel.Caption style={{backgroundColor: '#ffffff77'}}>
                         <p>{desc[index]}</p>
                     </Carousel.Caption>
@@ -18,7 +18,7 @@ function ImageCarousel({ files, desc }) {
         )
     })
     return (
-        <Carousel variant="dark" style={{marginTop:'10px'}}>
+        <Carousel variant="dark" style={{marginTop:'20px'}}>
             {urls}
         </Carousel>
     );
