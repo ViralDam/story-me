@@ -8,3 +8,8 @@
 - Go to `story-me-client` directory in command prompt.
 - Run `npm install`
 - Run `npm start`
+
+  ---
+  ## Developed By:
+- Shreyas Joshi
+- Viral Damaniya
